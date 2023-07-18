@@ -1,4 +1,5 @@
 ﻿using Contacts.Server.Mappers;
+using Contacts.Server.Queries;
 using Contacts.Server.Repositories;
 using Contacts.Shared.Models;
 using MediatR;
@@ -19,7 +20,7 @@ namespace Contacts.Server.Handlers
         public async Task<List<ContactsResponse>> Handle(GetAllContactsQuery request, CancellationToken cancellationToken)
         {
             var contacts = await _contactsRepository.GetAllAsync();
-            return _mapper.MapContactsDtoToContactsResponse(contacts);
+            return await _mapper.MapContactsListDtoToContactsResponse(contacts);
         }
 
     }

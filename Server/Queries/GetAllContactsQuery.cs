@@ -1,7 +1,7 @@
 ﻿using Contacts.Shared.Models;
 using MediatR;
 
-namespace Contacts.Server.Handlers
+namespace Contacts.Server.Queries
 {
     public class GetAllContactsQuery : IRequest<List<ContactsResponse>>
     {

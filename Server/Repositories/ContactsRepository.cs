@@ -1,13 +1,14 @@
-﻿using Contacts.Server.Entities;
+﻿using Contacts.Server.Config;
+using Contacts.Server.Entities;
 using Contacts.Server.Repositories;
 using Contacts.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class ContactsRepository : IContactsRepository
 {
-    private readonly DbContext _context;
+    private readonly YourDbContext _context;
 
-    public ContactsRepository(DbContext context)
+    public ContactsRepository(YourDbContext context)
     {
         _context = context;
     }

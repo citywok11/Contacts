@@ -1,5 +1,6 @@
-using Contacts.Server.Handlers;
-using Contacts.Shared;
+using Contacts.Server.Commands;
+using Contacts.Server.Queries;
+using Contacts.Shared.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,10 @@ namespace Contacts.Server.Controllers
         private readonly ILogger<ContactsController> _logger;
         private readonly IMediator _mediator;
 
-        public ContactsController(ILogger<ContactsController> logger)
+        public ContactsController(IMediator mediator, ILogger<ContactsController> logger)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -23,6 +25,15 @@ namespace Contacts.Server.Controllers
             var query = new GetAllContactsQuery();
             var contacts = await _mediator.Send(query);
             return Ok(contacts);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddContact([FromBody] ContactsModel contact)
+        {
+            {
+                await _mediator.Send(new CreateContactCommand(contact));
+                return StatusCode(201);
+            }
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace Contacts.Server.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Contacts.Server.Entities
 {
     public class Contact
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ContactID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

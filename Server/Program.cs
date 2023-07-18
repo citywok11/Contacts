@@ -1,8 +1,12 @@
+using Contacts.Server.Config;
+using Contacts.Server.Mappers;
 using Contacts.Server.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyNamespace;
+using System.Data.Entity;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +15,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<YourDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IContactsRepository, ContactsRepository>();
+builder.Services.AddScoped<ICustomMapper, CustomMapper>();
 
 
 var app = builder.Build();

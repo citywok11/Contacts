@@ -10,7 +10,7 @@ namespace MyNamespace
         public MyConfiguration()
         {
             SetExecutionStrategy("System.Data.SqlClient", () => new SqlAzureExecutionStrategy());
-            SetDefaultConnectionFactory(new LocalDbConnectionFactory("ContactsCb"));
+            SetDefaultConnectionFactory(new LocalDbConnectionFactory("ContactsDb"));
         }
     }
 }
