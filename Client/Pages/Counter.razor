@@ -1,23 +1,104 @@
 ﻿
 @page "/contacts"
 @inject IContactsService ContactsService
+@using PropertyColumn = Microsoft.AspNetCore.Components.QuickGrid
 
 
 <PageTitle>Counter</PageTitle>
 
-
 <ul>
-    @foreach (var contact in contacts)
-    {
-        <li>@contact.FirstName @contact.LastName</li>
-    }
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Contact ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>House Number</th>
+                <th>House Name</th>
+                <th>Post Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in contacts)
+            {
+                <tr @onclick="() => ShowDetails(contact)">
+                    <td>@contact.ContactID</td>
+                    <td>@contact.FirstName</td>
+                    <td>@contact.LastName</td>
+                    <td>@contact.Email</td>
+                    <td>@contact.PhoneNumber</td>
+                    <td>@contact.HouseNumber</td>
+                    <td>@contact.HouseName</td>
+                    <td>@contact.PostCode</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    
 </ul>
 
+<button class="btn btn-primary" @onclick="@AddContactButton">Add Contact</button>
+
 @code {
-    private List<ContactsResponse> contacts = new List<ContactsResponse>();
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
+    private ContactsModel selectedContact = new ContactsModel();
+
+    private List<ContactsModel> contacts = new List<ContactsModel>();
+
+    private List<ContactsResponse> contactsResponse = new List<ContactsResponse>();
+    private IQueryable<ContactsResponse?> queryableContacts;
 
     protected override async Task OnInitializedAsync()
     {
-        contacts = await ContactsService.GetContactsAsync();
+        contactsResponse = await ContactsService.GetContactsAsync();
+
+         contacts = contactsResponse.Select(c => new ContactsModel
+            {
+                ContactID = c.ContactID,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber,
+                HouseNumber = c.HouseNumber,
+                HouseName = c.HouseName,
+                PostCode = c.PostCode
+            }).ToList();
+    }
+
+
+    private void AddContactButton()
+    {
+        var options = new ModalOptions
+            {
+                UseCustomLayout = true
+            };
+
+        var parameters = new ModalParameters()
+            .Add(nameof(FetchData.contact), selectedContact)
+            .Add(nameof(FetchData.isEdit), false);
+
+        Modal.Show<FetchData>("Calculator", parameters, options);
+    }
+
+    private void ShowDetails(ContactsModel selectedContact)
+    {
+        var options = new ModalOptions
+            {
+                UseCustomLayout = true
+            };
+
+        var parameters = new ModalParameters()
+            .Add(nameof(FetchData.contact), selectedContact)
+            .Add(nameof(FetchData.isEdit), true);
+
+
+
+        Modal.Show<FetchData>("Calculator", parameters, options);
     }
 }

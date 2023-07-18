@@ -31,8 +31,20 @@ public class ContactsRepository : IContactsRepository
 
     public async Task UpdateAsync(Contact contact)
     {
-        _context.Entry(contact).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        var existingContact = await _context.Contacts.FindAsync(contact.ContactID);
+
+        if (existingContact != null)
+        {
+            existingContact.FirstName = contact.FirstName;
+            existingContact.LastName = contact.LastName;
+            existingContact.Email = contact.Email;
+            existingContact.PhoneNumber = contact.PhoneNumber;
+            existingContact.HouseNumber = contact.HouseNumber;
+            existingContact.HouseName = contact.HouseName;
+            existingContact.PostCode = contact.PostCode;
+
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task DeleteAsync(int id)

@@ -35,5 +35,14 @@ namespace Contacts.Server.Controllers
                 return StatusCode(201);
             }
         }
+
+        [HttpPut]
+        public async Task<ActionResult> EditContact([FromBody] ContactsModel contact)
+        {
+            {
+                await _mediator.Send(new EditContactCommand(contact));
+                return StatusCode(201);
+            }
+        }
     }
 }

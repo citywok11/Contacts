@@ -18,5 +18,17 @@ namespace Contacts.Client.Services
         {
             return await _httpClient.GetFromJsonAsync<List<ContactsResponse>>("Contacts");
         }
+
+        public async Task AddContactAsync(ContactsModel contact)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Contacts", contact);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task EditContactASync(ContactsModel contact)
+        {
+            var response = await _httpClient.PutAsJsonAsync("Contacts", contact);
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
