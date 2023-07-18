@@ -1,18 +1,23 @@
-﻿@page "/counter"
+﻿
+@page "/contacts"
+@inject IContactsService ContactsService
+
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<ul>
+    @foreach (var contact in contacts)
+    {
+        <li>@contact.FirstName @contact.LastName</li>
+    }
+</ul>
 
 @code {
-    private int currentCount = 0;
+    private List<ContactsResponse> contacts = new List<ContactsResponse>();
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        contacts = await ContactsService.GetContactsAsync();
     }
 }
