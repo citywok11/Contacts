@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Contacts.Server.Config
 {
-    public partial class YourDbContext : DbContext
+    public partial class ContactsDbContext : DbContext
     {
-        public YourDbContext()
+        public ContactsDbContext()
         {
         }
 
-        public YourDbContext(DbContextOptions<YourDbContext> options)
+        public ContactsDbContext(DbContextOptions<ContactsDbContext> options)
             : base(options)
         {
         }

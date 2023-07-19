@@ -1,5 +1,56 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+th {
+    padding:10px;
+}
+    .pLeft {
+    padding-left:20px;
+}
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-dialog {
+    margin: auto;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+    .modal-header .close {
+        margin-top: -2px;
+    }
+
+.modal-body {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    display: flex;
+}
+
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

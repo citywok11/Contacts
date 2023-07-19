@@ -44,6 +44,7 @@ namespace Contacts.Server.Mappers
         {
             return new Contact
             {
+                ContactID = contactModel.ContactID,
                 FirstName = contactModel.FirstName,
                 LastName = contactModel.LastName,
                 Email = contactModel.Email,

@@ -3,8 +3,9 @@
 @inject IContactsService ContactsService
 @using PropertyColumn = Microsoft.AspNetCore.Components.QuickGrid
 
+<PageTitle>Contacts</PageTitle>
 
-<PageTitle>Counter</PageTitle>
+<h1>These are your contacts!</h1>
 
 <ul>
 
@@ -42,10 +43,12 @@
     
 </ul>
 
-<button class="btn btn-primary" @onclick="@AddContactButton">Add Contact</button>
+<button class="btn btn-primary" @onclick="@AddNewContact">Add Contact</button>
 
 @code {
     [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
+    private bool showSuccessBanner = false;
 
     private ContactsModel selectedContact = new ContactsModel();
 
@@ -56,9 +59,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await GetContacts();
+        showSuccessBanner = false;
+    }
+
+    private async Task GetContacts()
+    {
         contactsResponse = await ContactsService.GetContactsAsync();
 
-         contacts = contactsResponse.Select(c => new ContactsModel
+        contacts = contactsResponse.Select(c => new ContactsModel
             {
                 ContactID = c.ContactID,
                 FirstName = c.FirstName,
@@ -72,7 +81,7 @@
     }
 
 
-    private void AddContactButton()
+    private async Task AddNewContact()
     {
         var options = new ModalOptions
             {
@@ -80,13 +89,20 @@
             };
 
         var parameters = new ModalParameters()
-            .Add(nameof(FetchData.contact), selectedContact)
-            .Add(nameof(FetchData.isEdit), false);
+            .Add(nameof(ContactModal.contact), selectedContact)
+            .Add(nameof(ContactModal.isEdit), false);
 
-        Modal.Show<FetchData>("Calculator", parameters, options);
+        var contactForm = Modal.Show<ContactModal>("Calculator", parameters, options);
+
+        var result = await contactForm.Result;
+
+        if (result.Confirmed)
+        {
+            await GetContacts();
+        }
     }
 
-    private void ShowDetails(ContactsModel selectedContact)
+    private async Task ShowDetails(ContactsModel selectedContact)
     {
         var options = new ModalOptions
             {
@@ -94,11 +110,15 @@
             };
 
         var parameters = new ModalParameters()
-            .Add(nameof(FetchData.contact), selectedContact)
-            .Add(nameof(FetchData.isEdit), true);
+            .Add(nameof(ContactModal.contact), selectedContact)
+            .Add(nameof(ContactModal.isEdit), true);
 
+        var contactForm = Modal.Show<ContactModal>("Calculator", parameters, options);
+        var result = await contactForm.Result;
 
-
-        Modal.Show<FetchData>("Calculator", parameters, options);
+        if (result.Confirmed)
+        {
+            await GetContacts();
+        }
     }
 }

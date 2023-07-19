@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 public class ContactsRepository : IContactsRepository
 {
-    private readonly YourDbContext _context;
+    private readonly ContactsDbContext _context;
 
-    public ContactsRepository(YourDbContext context)
+    public ContactsRepository(ContactsDbContext context)
     {
         _context = context;
     }

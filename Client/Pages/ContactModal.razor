@@ -1,0 +1,111 @@
+﻿@using Contacts.Shared
+@inject IContactsService ContactsService
+
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-backdrop fade show" @onclick="Cancel"></div>
+    <div class="modal-dialog" style="z-index: 1050">
+        <!-- Pop it above the backdrop -->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="">Contacts Form</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <EditForm Model="@contact">
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">First Name:</label>
+                    <div class="col-sm-10">
+                        <InputText class="form-control" @bind-Value="@contact.FirstName" />
+                    </div>
+                </div>
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">Last Name:</label>
+                    <div class="col-sm-10">
+                        <InputText class="form-control" @bind-Value="@contact.LastName" />
+                    </div>
+                </div>
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">Email:</label>
+                    <div class="col-sm-10">
+                        <InputText class="form-control" @bind-Value="@contact.Email" />
+                    </div>
+                </div>
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">Phone Number:</label>
+                    <div class="col-sm-10">
+                        <InputText class="form-control" @bind-Value="@contact.PhoneNumber" />
+                    </div>
+                </div>
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">House Number:</label>
+                    <div class="col-sm-10">
+                        <InputNumber class="form-control" @bind-Value="@contact.HouseNumber" />
+                    </div>
+                </div>
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">House Name:</label>
+                    <div class="col-sm-10">
+                        <InputText class="form-control" @bind-Value="@contact.HouseName" />
+                    </div>
+                </div>
+                <div class="form-group row pLeft">
+                    <label class="col-sm-2 col-form-label">Post Code:</label>
+                    <div class="col-sm-10">
+                        <InputText class="form-control" @bind-Value="@contact.PostCode" />
+                    </div>
+                </div>
+
+
+
+
+
+            <div class="modal-footer">
+                @if (isEdit)
+                {
+                    <button class="btn btn-primary" @onclick="Edit" type="submit">Edit</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" @onclick="HandleSubmit" type="submit">Create</button>
+                }
+                <button type="button" class="btn btn-secondary" @onclick="Close">Close</button>
+            </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter] public ContactsModel contact { get; set; }
+    [Parameter] public bool isEdit { get; set; }
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private async Task Close() => await BlazoredModal.CloseAsync(ModalResult.Ok(true));
+    private async Task Cancel() => await BlazoredModal.CancelAsync();
+
+    private bool showSuccessBanner = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        showSuccessBanner = false;
+    }
+
+    private async Task HandleSubmit()
+    {
+        await ContactsService.AddContactAsync(contact);
+        showSuccessBanner = true;
+        await Close();
+    }
+
+    private async Task Edit()
+    {
+        await ContactsService.EditContactASync(contact);
+        showSuccessBanner = true;
+        await Close();
+    }
+}
