@@ -36,8 +36,6 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IContactsRepository, ContactsRepository>();
 builder.Services.AddScoped<ICustomMapper, CustomMapper>();
-builder.Services.AddLogging();
-
 
 
 var app = builder.Build();
