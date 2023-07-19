@@ -9,5 +9,4 @@ public interface IContactsRepository
     Task<Contact> GetByIdAsync(int id);
     Task AddAsync(Contact contact);
     Task UpdateAsync(Contact contact);
-    Task DeleteAsync(int id);
 }
